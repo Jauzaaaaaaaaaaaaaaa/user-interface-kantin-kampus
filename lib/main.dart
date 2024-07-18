@@ -1,82 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:kantin/daftar_kantin.dart';
-import 'registrasi_page.dart';
+import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'wrapper.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Hive.initFlutter();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Login Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginPage(),
-    );
-  }
-}
+  const MyApp({Key? key}) : super(key: key);
 
-class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login', style: TextStyle(color: Colors.white)),
-        backgroundColor: const Color.fromARGB(255, 158, 79, 50),
+    return GetMaterialApp(
+      debugShowCheckedModeBanner: false, // Hapus banner debug di mode debug
+      title: 'Kantin App',
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                ),
-              ),
-              SizedBox(height: 20),
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DaftarKantinKampus()),
-                  );
-                  // Add login functionality here
-                },
-                child: Text('Login'),
-              ),
-              SizedBox(height: 20),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegistrationPage()),
-                  );
-                },
-                child: Text(
-                  'Belum punya akun? Registrasi disini.',
-                  style: TextStyle(
-                    color: Colors.blue,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      home: Wrapper(),
     );
   }
 }
